@@ -28,8 +28,9 @@
                 }).done(function(respu){
                    console.log("respuesta : " + respu);
                    info = document.getElementById("info");
-                   console.log("nombre:"+ respu.NOMBRE);
+                   
                    obj = JSON.parse(respu);
+                   console.log("nombre:"+ obj.NOMBRE);
                    info.innerHTML= obj;
                    
                 });
