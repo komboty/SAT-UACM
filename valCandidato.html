@@ -22,14 +22,15 @@
                 console.log("entro a la funcion");
                    
                 $.ajax({
-                    url: "logica/helperCandidato.php",
+                    url: "Persistencia/helperCandidato.php",
                     type: "GET",
                     data: { option: "candidatosNoAceptados",datos:"null" }
                 }).done(function(respu){
                    console.log("respuesta : " + respu);
                    info = document.getElementById("info");
-                   
-                   info.innerHTML= respu;
+                   console.log("nombre:"+ respu.NOMBRE);
+                   obj = JSON.parse(respu);
+                   info.innerHTML= obj;
                    
                 });
             }
