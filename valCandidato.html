@@ -17,12 +17,14 @@
             window.onload = function() {
             submit = document.getElementById("boton");
             submit.addEventListener("click",getCandidatosNoRegistrados);
+            
+            
             }
             function getCandidatosNoRegistrados(){
                 console.log("entro a la funcion");
                    
                 $.ajax({
-                    url: "Persistencia/helperCandidato.php",
+                    url: "logica/CerebroCandidato.php",
                     type: "GET",
                     data: { option: "candidatosNoAceptados",datos:"null" }
                 }).done(function(respu){
