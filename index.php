@@ -12,6 +12,27 @@
 		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
 		<link rel="stylesheet" href="css/styleMain.css" />
 		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script>
+            window.onload = function() {
+                submit = document.getElementById("boton");
+                submit.addEventListener("click",getCandidatosNoRegistrados);
+            }
+            function getCandidatosNoRegistrados(){
+                console.log("entro a la funcion");
+                   
+               $.ajax({
+                    url: "helperCandidatos.php",
+                    type: "GET",
+                    data: { option: "candidatosNoAceptados",datos:"null" }
+                }).done(function(respu){
+                   console.log("respuesta : " + respu);
+                   info = document.getElementById("info");
+                   info.innerHTML= respu;
+                   
+                });
+            }
+        </script>    
 	</head>
 	<body>
 		
