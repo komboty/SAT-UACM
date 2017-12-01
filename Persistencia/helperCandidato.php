@@ -21,10 +21,58 @@ if ($conn->connect_error) {
 
 
 
-    $option = $_GET['option'];
+   // $option = $_GET['option'];
     $datos = $_GET['datos'];
+    $method = $_SERVER['REQUEST_METHOD'];
+    /*
+     * De todo lo que envio el cliente busca un llave especifica por cuestiones
+    de seguridad.
+     */
+    $option = basename(filter_input(INPUT_GET, 'option', FILTER_UNSAFE_RAW, FILTER_FLAG_STRIP_LOW));
     
-    if($_SERVER['REQUEST_METHOD'] == "GET" && $option == 'candidatosNoAceptados'){
+    if($method == "GET" && $option == 'candidatosNoAceptados'){
+        
+        
+        $sql = "SELECT * FROM CANDIDATO WHERE IDGRUPO IS NULL";
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+        // output data of each row
+            $json= array();
+            while($reg = $result->fetch_assoc()) {
+            
+                $myObj = array(
+                    'idcandidato' => $reg['IDCANDIDATO'],
+                     'idasesor' => $reg['IDASESOR'],
+                     'idgrupo' => $reg['IDGRUPO'],
+                     'foto' => $reg['FOTO'],
+                     'nombre' => $reg['NOMBRE'],
+                     'apellidoPaterno' => $reg['APELLIDOPATERNO'],
+                     'apellidoMaterno' => $reg['APELLIDOMATERNO'],
+                     'contrasena' => $reg['CONTRASENA'],
+                     'matricula' => $reg['MATRICULA'],
+                     'email' => $reg['EMAIL'],
+                     'celular' => $reg['CELULAR'],
+                     'carrera' => $reg['CARRERA'],
+                     'credito' => $reg['CREDITOS'],
+                     'tematesis' => $reg['TEMADETESIS'],               
+                     'directorDeTesis' => $reg['DIRECTORDETESIS'],
+                     'ugarTabajo' => $reg['LUGARTRABAJO'],
+                     'horarioTrabajo' => $reg['HORARIOTRABAJO'],
+                     'cartaCompromiso' => $reg['CARTACOMPROMISO'],
+                     'cartaExpoMotivos' => $reg['CARTAEXPOMOTIVOS']
+                
+                );
+                  
+                array_push($json, $myObj);
+                }
+            } else {
+            echo "0 results";
+            }
+            $conn->close();
+            echo json_encode($json, JSON_FORCE_OBJECT);
+        }
+        if($_SERVER['REQUEST_METHOD'] == "GET" && $option == 'candidatos'){
         
         
         $sql = "SELECT * FROM CANDIDATO";
@@ -36,25 +84,25 @@ if ($conn->connect_error) {
             while($reg = $result->fetch_assoc()) {
             
                 $myObj = array(
-                    'IDCANDIDATO' => $reg['IDCANDIDATO'],
-                     'IDASESOR' => $reg['IDASESOR'],
-                     'IDGRUPO' => $reg['IDGRUPO'],
-                     'FOTO' => $reg['FOTO'],
-                     'NOMBRE' => $reg['NOMBRE'],
-                     'APELLIDOPATERNO' => $reg['APELLIDOPATERNO'],
-                     'APELLIDOMATERNO' => $reg['APELLIDOMATERNO'],
-                     'CONTRASENA' => $reg['CONTRASENA'],
-                     'MATRICULA' => $reg['MATRICULA'],
-                     'EMAIL' => $reg['EMAIL'],
-                     'CELULAR' => $reg['CELULAR'],
-                     'CARRERA' => $reg['CARRERA'],
-                     'CREDITOS' => $reg['CREDITOS'],
-                     'TEMADETESIS' => $reg['TEMADETESIS'],               
-                     'DIRECTORDETESIS' => $reg['DIRECTORDETESIS'],
-                     'LUGARTRABAJO' => $reg['LUGARTRABAJO'],
-                     'HORARIOTRABAJO' => $reg['HORARIOTRABAJO'],
-                     'CARTACOMPROMISO' => $reg['CARTACOMPROMISO'],
-                     'CARTAEXPOMOTIVOS' => $reg['CARTAEXPOMOTIVOS']
+                    'idcandidato' => $reg['IDCANDIDATO'],
+                     'idasesor' => $reg['IDASESOR'],
+                     'idgrupo' => $reg['IDGRUPO'],
+                     'foto' => $reg['FOTO'],
+                     'nombre' => $reg['NOMBRE'],
+                     'apellidoPaterno' => $reg['APELLIDOPATERNO'],
+                     'apellidoMaterno' => $reg['APELLIDOMATERNO'],
+                     'contrasena' => $reg['CONTRASENA'],
+                     'matricula' => $reg['MATRICULA'],
+                     'email' => $reg['EMAIL'],
+                     'celular' => $reg['CELULAR'],
+                     'carrera' => $reg['CARRERA'],
+                     'credito' => $reg['CREDITOS'],
+                     'tematesis' => $reg['TEMADETESIS'],               
+                     'directorDeTesis' => $reg['DIRECTORDETESIS'],
+                     'ugarTabajo' => $reg['LUGARTRABAJO'],
+                     'horarioTrabajo' => $reg['HORARIOTRABAJO'],
+                     'cartaCompromiso' => $reg['CARTACOMPROMISO'],
+                     'cartaExpoMotivos' => $reg['CARTAEXPOMOTIVOS']
                 
                 );
                   
