@@ -22,12 +22,12 @@ include '../Persistencia/DBConnection.php';
         // output data of each row
             $json= array();
             while($reg = $result->fetch_assoc()) {
-            
+                
                 $myObj = array(
                     'idcandidato' => $reg['IDCANDIDATO'],
                      'idasesor' => $reg['IDASESOR'],
                      'idgrupo' => $reg['IDGRUPO'],
-                     'foto' => $reg['FOTO'],
+                     'foto' => "",
                      'nombre' => $reg['NOMBRE'],
                      'apellidoPaterno' => $reg['APELLIDOPATERNO'],
                      'apellidoMaterno' => $reg['APELLIDOMATERNO'],
@@ -36,15 +36,29 @@ include '../Persistencia/DBConnection.php';
                      'email' => $reg['EMAIL'],
                      'celular' => $reg['CELULAR'],
                      'carrera' => $reg['CARRERA'],
-                     'credito' => $reg['CREDITOS'],
+                     'creditos' => $reg['CREDITOS'],
                      'tematesis' => $reg['TEMADETESIS'],               
                      'directorDeTesis' => $reg['DIRECTORDETESIS'],
                      'ugarTabajo' => $reg['LUGARTRABAJO'],
                      'horarioTrabajo' => $reg['HORARIOTRABAJO'],
-                     'cartaCompromiso' => $reg['CARTACOMPROMISO'],
-                     'cartaExpoMotivos' => $reg['CARTAEXPOMOTIVOS']
-                
+                     'cartaCompromiso' => "",
+                     'cartaExpoMotivos' => ""
+                    
                 );
+                if($reg['CARTACOMPROMISO'] == NULL){
+                    
+                   $myObj['cartaCompromiso'] = "0";
+                          
+                }else {
+                    $myObj['cartaCompromiso'] = "1";
+                }
+                if($reg['CARTAEXPOMOTIVOS'] == NULL){
+                    
+                   $myObj['cartaExpoMotivos'] = "0";
+                          
+                }else {
+                    $myObj['cartaExpoMotivos'] = "1";
+                }
                   
                 array_push($json, $myObj);
                 }
@@ -53,6 +67,26 @@ include '../Persistencia/DBConnection.php';
             }
             //$conn->close();
             echo json_encode($json, JSON_FORCE_OBJECT);
+        }
+        
+        if($method == "GET" && $option == 'getFoto'){
+            
+        $conn = new Connection();
+        $sql = "SELECT FOTO FROM CANDIDATO WHERE IDCANDIDATO = ".$datos;
+        $result = $conn->db_query($sql);
+        
+        if ($result->num_rows > 0) {
+        // output data of each row
+            $imgData = $result->fetch_assoc();
+        
+            //Render image
+            header("Content-type: image/jpg"); 
+            echo $imgData['FOTO']; 
+            } else {
+            echo "0 results";
+            }
+            //$conn->close();
+            
         }
     
     ?>
