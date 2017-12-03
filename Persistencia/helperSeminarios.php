@@ -53,7 +53,7 @@ class helperSeminarios {
                 
                 $myObj = array(
                     'idcandidato' => $reg['IDCANDIDATO'],
-                     'idasesor' => $reg['IDASESOR'],
+                     'asesor' => $reg['IDASESOR'],
                      'idgrupo' => $reg['IDGRUPO'],
                      'foto' => "",
                      'nombre' => $reg['NOMBRE'],
@@ -83,10 +83,26 @@ class helperSeminarios {
                 }else {
                     $myObj['cartaExpoMotivos'] = "1";
                 }
-                  
+                 
+                $myObj['asesor'] = $this->getNombreAsesor($myObj['asesor']); 
+                
                 array_push($json, $myObj);                 
             }
             echo json_encode($json, JSON_FORCE_OBJECT);
+        }
+    }
+    
+    //obtiene el nombre del asesor de un canddato.
+    public function getNombreAsesor($id) {
+        if($id == null){
+            return;
+        }
+        
+        $sql = "SELECT * FROM ASESOR WHERE IDASESOR = ".$id;
+        $result = $this->conexion->db_query($sql);
+
+        while($reg = $result->fetch_assoc()) {
+            return $reg['NOMBRE'].' '.$reg['APELLIDOPATERNO'];
         }
     }
     

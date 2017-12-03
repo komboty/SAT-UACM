@@ -104,6 +104,8 @@ function mostrar() {
             var row3 = table2.insertRow(0);
             var row4 = table2.insertRow(0);
             var row5 = table2.insertRow(0);
+            var row6 = table2.insertRow(0);
+            var row7 = table2.insertRow(0);
 
             var cell0 = row0.insertCell(0);
             var cell1 = row1.insertCell(0);
@@ -111,17 +113,22 @@ function mostrar() {
             var cell3 = row3.insertCell(0);
             var cell4 = row4.insertCell(0);
             var cell5 = row5.insertCell(0);
+            var cell6 = row6.insertCell(0);
+            var cell7 = row7.insertCell(0);
 
-
-
-            cell5.innerHTML = "Nombre: " + json[i]["nombre"] + " "
-                    + json[i]["apellidoPaterno"] + " "
-                    + json[i]["apellidoMaterno"];
-            cell4.innerHTML = "Matricula: " + json[i]["matricula"];
+            var apPaterno = json[i]["apellidoPaterno"];
+            var apMaterno = json[i]["apellidoMaterno"];
+            
+            cell7.innerHTML = "Tema de Tesis: " + json[i]["tematesis"];
+            cell6.innerHTML = "Nombre: " + json[i]["nombre"] + " "
+                    + apPaterno.substr(0,1) + " "
+                    + apMaterno.substr(0,1);
+            cell5.innerHTML = "Director de Tesis: " + json[i]["directorDeTesis"];
+            cell4.innerHTML = "Asesor: " + json[i]["asesor"];
             cell3.innerHTML = "Carrera: " + json[i]["carrera"];
             cell2.innerHTML = "Creditos: " + json[i]["creditos"] + "%";
             if (json[i]["cartaCompromiso"] == "1") {
-                cell1.innerHTML = "Carta compromiso: ENTREGADA";
+                //cell1.innerHTML = "Carta compromiso: ENTREGADA";
                 var btCartaComp = document.createElement('BUTTON');
                 btCartaComp.setAttribute("class", "cCompromiso");
                 btCartaComp.setAttribute("name", "BntCC");
@@ -137,7 +144,7 @@ function mostrar() {
             
             if (json[i]["cartaExpoMotivos"] == "1") {
                 //creando un boton para accesar al documento pdf
-                cell0.innerHTML = "Carta de motivos: ENTREGADA";
+                //cell0.innerHTML = "Carta de motivos: ENTREGADA";
                 var btCartaComp = document.createElement('BUTTON');
                 btCartaComp.setAttribute("class", "cCompromiso");
                 btCartaComp.setAttribute("name", "BntCC");
