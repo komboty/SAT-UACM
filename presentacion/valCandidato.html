@@ -16,10 +16,18 @@
         <script>
             window.onload = function() {
             submit = document.getElementById("boton");
-            submit.addEventListener("click",getCandidatosNoRegistrados);
+            //submit.addEventListener("click",getCandidatosNoRegistrados);
+            getCandidatosNoRegistrados();
             }
+            /*
+             * realiza un consulta a la base de datos de todos los candidatos
+             * no registrados y crea una lista donde se pueden  visualizar
+             * asi como botones para accesar a sus respectivas cartas compromiso
+             * y de motivos 
+             * @returns {undefined}
+             */
             function getCandidatosNoRegistrados(){
-                console.log("entro a la funcion");
+                
                    
                 $.ajax({
                     url: "../logica/CerebroCandidato.php",
@@ -48,18 +56,11 @@
                             foto.setAttribute("width","175");//width="175" height="200"
                             foto.setAttribute("width","200");
                             div2.appendChild(foto);
-                            //agregando los datos del candidato
+                        // se agregando los datos del candidato a una tabla
                         var table = document.createElement('table');
                         table.setAttribute("id","table"+(i+1));
                         div2.appendChild(table);
                         table2 = document.getElementById("table"+(i+1));
-                            
-                        //div.setAttribute("id","div"+i+1);
-                       
-                       
-                            //var div = document.createElement("DIV");
-                            
-                            //var table = document.getElementById("myTable");
                            
                             var row0 = table2.insertRow(0);
                             var row1 = table2.insertRow(0);
@@ -102,7 +103,7 @@
                                //creando un boton para accesar al documento pdf
                                 cell0.innerHTML= "Carta de motivos: ENTREGADA";
                                 var btCartaComp = document.createElement('BUTTON');
-                                btCartaComp.setAttribute("class","cCompromiso");                           
+                                btCartaComp.setAttribute("class","cMotivos");                           
                                 btCartaComp.setAttribute("name","BntCC");
                                 btCartaComp.setAttribute("id",json[i]["idcandidato"]);
                                 btCartaComp.addEventListener("click",getCartaMotivos);
@@ -114,25 +115,26 @@
                             }else {
                                 cell0.innerHTML= "Carta de motivos: NO ENTREGADA";
                             }
-        //cell0.innerHTML = "Carta de Motivos: "+ json[i]["cartaMotivos"];
-                            
-                        //agregando boton de validar candidato    
-                        var validarCandidato = document.createElement('BUTTON');
-                        validarCandidato.setAttribute("class","validar");
+                        //si el cnadidato cumple con tener carta compromiso y carta motivos 
+                        //se le podra agregar a un grupo
+                        if(json[i]["cartaCompromiso"]== "1" && json[i]["cartaExpoMotivos"]== "1"){   
+                        
+                            var br = document.createElement("br"); 
+                            infoSeccion.appendChild(br);
+                            var validarCandidato = document.createElement('BUTTON');
+                            validarCandidato.setAttribute("class","validar");
                         //validarCandidato.setAttribute("value",json[i]['idcandidato']);
-                        validarCandidato.setAttribute("name","idBnt");
+                            validarCandidato.setAttribute("name","idBnt");
                        // validarCandidato.setAttribute("id",json[i]['idcandidato']);
                         
-                        validarCandidato.setAttribute("id",json[i]["idcandidato"]);
-                        validarCandidato.addEventListener("click",validarCandidatos);
-                        var t = document.createTextNode("Validar Candidato");  
+                            validarCandidato.setAttribute("id",json[i]["idcandidato"]);
+                            validarCandidato.addEventListener("click",validarCandidatos);
+                            var t = document.createTextNode("Validar Candidato");  
                         // Create a text node
-                        validarCandidato.appendChild(t);
-                        div2.appendChild(validarCandidato);
-                        
-                         var br = document.createElement("br");    
-                         
-                    
+                            validarCandidato.appendChild(t);
+                            div2.appendChild(validarCandidato);
+                        }
+                        var br = document.createElement("br");                       
                         var hr = document.createElement("hr");    
                         infoSeccion.appendChild(br);
                         infoSeccion.appendChild(hr);
@@ -142,16 +144,35 @@
             
         });
     }
+    //el envia el id de un candidato para ser agregado a un candidato
     function validarCandidatos(){
         //algo = request.getParameter("idBnt");
         //recuerpando el id del candidato sobre el que dieron click
         alert(this.id);
+        $.ajax({
+            url: "../logica/CerebroCandidato.php",
+                type: "GET",
+                data: { option: "insertCandidatoAceptado",datos:this.id }
+        }).done(function(respu){
+            alert(respu);
+            console.log(respu);
+        });
     }
+    /*
+     * obtiene la carta de motivos del candidato para su visualizacion
+     */
     function getCartaMotivos(){
-        alert(this.id);
+        //alert(this.id);
+        window.open("../logica/CerebroCandidato.php?option=getCartaMotivos&datos="+this.id);
+        
     }
+    /*
+     * obtieve la carta compromiso del candidato para su visualizacion
+     */
     function getCartaCompromiso(){
-        alert(this.id);
+       // alert(this.id);
+        window.open("../logica/CerebroCandidato.php?option=getCartaCompromiso&datos="+this.id);
+         
     }
         </script>
     </head>
@@ -187,7 +208,7 @@
                         <h2>Lista de candidatos no aceptados en algun seminario.</h2>
                                                                 
                                   
-                        <input type="submit" id="boton">					
+                      					
                     </section>
 
                 </div>
