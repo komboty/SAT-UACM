@@ -18,10 +18,7 @@ include '../Persistencia/DBConnection.php';
         echo $option;
         
     }
-    
-    
-    
-    
+   
     if($method == "GET" && $option == 'candidatosNoAceptados'){
             
         $conn = new Connection();
