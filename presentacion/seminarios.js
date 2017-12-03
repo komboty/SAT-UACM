@@ -7,8 +7,9 @@ window.onload = function () {
     grupos();
 };
 
-function grupos() {
+json = '';
 
+function grupos() {
     $.ajax({
         url: "../logica/CerebroGrupo.php",
         type: "GET",
@@ -17,44 +18,50 @@ function grupos() {
         //console.log("respuesta : " + respu);
 //        json = JSON.parse(respu);
         json = JSON.parse(respu);
-
-        //se obtiene cuantos crupos hay registrados.
-        var numGrupos = Object.keys(json).length;
-
-        var secction = document.getElementById('grupos');
-        //Crea una tabla para mostrar los grupos.
-        var tabla = document.createElement("table");
-        var tblBody = document.createElement("tbody");
-
-        // Crea los rengolnes de la tabla.
-        for (var i = 0; i < numGrupos; i++) {
-            var renglon = document.createElement("tr");
-            // Crea las celdas.
-            //for (var j = 0; j < 3; j++) {
-            var celda = document.createElement("td");
-            var textoCelda = document.createTextNode(json[i]['id'] + " " + json[i]['nombre'] + " " + json[i]['semestre']);
-            celda.onclick = function () {
-                mostrar(this);
-            };//this); };
-            celda.appendChild(textoCelda);
-            renglon.appendChild(celda);
-            //}
-            // agremagos a la tabla el renglon.
-            tblBody.appendChild(renglon);
-        }
-
-        // agregamos todos los renglones a la tabla.
-        tabla.appendChild(tblBody);
-        secction.appendChild(tabla);
+        crearOpciones();
     });
 }
 
-function mostrar(tableCell) { //tableCell) {    
-    //limpira tabla.
-    /*while (tableCell.hasChildNodes()) {
-        tableCell.removeChild(tableCell.lastChild);
-    }*/
-    var id = tableCell.innerHTML.substr(0,1);
+function crearOpciones() { 
+    //se obtiene cuantos crupos hay registrados.
+    var numGrupos = Object.keys(json).length;
+
+    var select = document.getElementById('select');
+    
+    //se crea un una lista con los grupos que estan en la base de datos.
+    //var select = document.createElement("SELECT");
+    //select.setAttribute("id", "mySelect");
+    select.onchange = function () { mostrar(); };
+    //secction.appendChild(select);
+
+    for (var i = 0; i < numGrupos; i++) {
+        var opcion = document.createElement("option");
+        opcion.setAttribute("value", json[i]['id']);        
+        var nombre = document.createTextNode(json[i]['nombre'] + " " + json[i]['semestre']);
+        opcion.appendChild(nombre);    
+        select.appendChild(opcion);
+    }
+}
+
+function mostrar() {    
+    var id =  document.getElementById('select').value;
+    var infoSeccion = document.getElementById("grup");
+            
+    //limpira los candidatos.
+    while (infoSeccion.hasChildNodes()) {
+        infoSeccion.removeChild(infoSeccion.lastChild);
+    }       
+    
+    //si escoge la opción en blaco solo borrara la consulta anterior.
+    if (id === ''){
+        return;
+    }
+    //crearTabla()
+    //Mensaje de cargando.
+    var cargando = document.createElement('div');
+    cargando.appendChild(document.createTextNode('Cargando...'));
+    infoSeccion.appendChild(cargando);
+    
     $.ajax({
         url: "../logica/cerebroGrupo.php",
         type: "GET",
@@ -63,8 +70,16 @@ function mostrar(tableCell) { //tableCell) {
         //console.log("respuesta : " + respu);
         json = JSON.parse(respu);
         
+        //se borra el mensaje de cargando.
+        infoSeccion.removeChild(infoSeccion.lastChild);
+        
         //insertando los candidatos en el documente html
-        var infoSeccion = tableCell;        
+        //var infoSeccion = document.getElementById("grup");
+        
+        var br = document.createElement("br");
+        var hr = document.createElement("hr");
+        infoSeccion.appendChild(br);
+        infoSeccion.appendChild(hr);
         var count = Object.keys(json).length;
         for (var i = 0; i < count; i++) {
             var div = document.createElement("div");
@@ -136,25 +151,8 @@ function mostrar(tableCell) { //tableCell) {
             } else {
                 cell0.innerHTML = "Carta de motivos: NO ENTREGADA";
             }
-            //cell0.innerHTML = "Carta de Motivos: "+ json[i]["cartaMotivos"];
-
-            //agregando boton de validar candidato    
-            var validarCandidato = document.createElement('BUTTON');
-            validarCandidato.setAttribute("class", "validar");
-            //validarCandidato.setAttribute("value",json[i]['idcandidato']);
-            validarCandidato.setAttribute("name", "idBnt");
-            // validarCandidato.setAttribute("id",json[i]['idcandidato']);
-
-            validarCandidato.setAttribute("id", json[i]["idcandidato"]);
-            validarCandidato.addEventListener("click", validarCandidatos);
-            var t = document.createTextNode("Validar Candidato");
-            // Create a text node
-            validarCandidato.appendChild(t);
-            div2.appendChild(validarCandidato);
 
             var br = document.createElement("br");
-
-
             var hr = document.createElement("hr");
             infoSeccion.appendChild(br);
             infoSeccion.appendChild(hr);
@@ -162,11 +160,6 @@ function mostrar(tableCell) { //tableCell) {
         }
     });
     
-    function validarCandidatos(){
-        //algo = request.getParameter("idBnt");
-        //recuerpando el id del candidato sobre el que dieron click
-        alert(this.id);
-    }
     function getCartaMotivos(){
         alert(this.id);
     }
