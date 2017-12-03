@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  * Creado por Javier Monroy Salcedo
+ * last update hoy
  */
 
 window.onload = function() {
