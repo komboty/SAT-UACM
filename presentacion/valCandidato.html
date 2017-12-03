@@ -3,6 +3,7 @@
 	TXT by HTML5 UP
 	html5up.net | @ajlkn
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+        Creado por Javier Monroy Salcedo
 -->
 <html>
     <head>
@@ -13,146 +14,9 @@
 	<link rel="stylesheet" href="css/styleMain.css" />
 	<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="js/valCandidato.js"></script>
         <script>
-            window.onload = function() {
-            submit = document.getElementById("boton");
-            submit.addEventListener("click",getCandidatosNoRegistrados);
-            }
-            function getCandidatosNoRegistrados(){
-                console.log("entro a la funcion");
-                   
-                $.ajax({
-                    url: "../logica/CerebroCandidato.php",
-                    type: "GET",
-                    data: { option: "candidatosNoAceptados",datos:"null" }
-                }).done(function(respu){
-                    console.log("respuesta : " + respu);
-                    info = document.getElementById("info");                  
-                    json = JSON.parse(respu);
-                    console.log("nombre:"+ json[0]["nombre"]);
-                    
-                    /*
-                     * insertando los candidatos en el documente html
-                     */
-                    var infoSeccion = document.getElementById("infoSeccion");
-                    var count = Object.keys(json).length;
-                    for(var i = 0; i < count; i++){
-                        var div = document.createElement("div");
-                        div.setAttribute("id","contener"+(i+1));
-                        infoSeccion.appendChild(div);
-                        var div2 = document.getElementById("contener"+(i+1));
-                        //agregando la foto
-                         foto = document.createElement("IMG");//?option=getFoto&datos=8
-                            foto.setAttribute("src","../logica/CerebroCandidato.php?option=getFoto&datos="+json[i]["idcandidato"]);
-                            //foto.setAttribute("src","https://www.imagejournal.org/wp-content/uploads/bb-plugin/cache/23466317216_b99485ba14_o-panorama.jpg");
-                            foto.setAttribute("width","175");//width="175" height="200"
-                            foto.setAttribute("width","200");
-                            div2.appendChild(foto);
-                            //agregando los datos del candidato
-                        var table = document.createElement('table');
-                        table.setAttribute("id","table"+(i+1));
-                        div2.appendChild(table);
-                        table2 = document.getElementById("table"+(i+1));
-                            
-                        //div.setAttribute("id","div"+i+1);
-                       
-                       
-                            //var div = document.createElement("DIV");
-                            
-                            //var table = document.getElementById("myTable");
-                           
-                            var row0 = table2.insertRow(0);
-                            var row1 = table2.insertRow(0);
-                            var row2 = table2.insertRow(0);
-                            var row3 = table2.insertRow(0);
-                            var row4 = table2.insertRow(0);
-                            var row5 = table2.insertRow(0);
-                            
-                            var cell0 =row0.insertCell(0);
-                            var cell1 =row1.insertCell(0);
-                            var cell2 =row2.insertCell(0);
-                            var cell3 =row3.insertCell(0);
-                            var cell4 =row4.insertCell(0);
-                            var cell5 =row5.insertCell(0);
-                           
-                            
-                            
-                            cell5.innerHTML ="Nombre: " + json[i]["nombre"]+ " "
-                                    +json[i]["apellidoPaterno"]+ " "
-                                    +json[i]["apellidoMaterno"];
-                            cell4.innerHTML = "Matricula: " + json[i]["matricula"];
-                            cell3.innerHTML = "Carrera: "+ json[i]["carrera"];
-                            cell2.innerHTML = "Creditos: " + json[i]["creditos"]+"%";
-                            if(json[i]["cartaCompromiso"]== "1"){
-                                cell1.innerHTML= "Carta compromiso: ENTREGADA";
-                                var btCartaComp = document.createElement('BUTTON');
-                                btCartaComp.setAttribute("class","cCompromiso");                           
-                                btCartaComp.setAttribute("name","BntCC");
-                                btCartaComp.setAttribute("id",json[i]["idcandidato"]);
-                                btCartaComp.addEventListener("click",getCartaCompromiso);
-                                var t = document.createTextNode("Ver carta compromiso");  
-                                // Create a text node
-                                btCartaComp.appendChild(t);
-                                div2.appendChild(btCartaComp);
-                            }else {
-                                cell1.innerHTML= "Carta compromiso: NO ENTREGADA";
-                            }
-                           // cell1.innerHTML = "Carta Compromiso: "+json[i]["cartaCompromiso"] ;
-                           if(json[i]["cartaExpoMotivos"]== "1"){
-                               //creando un boton para accesar al documento pdf
-                                cell0.innerHTML= "Carta de motivos: ENTREGADA";
-                                var btCartaComp = document.createElement('BUTTON');
-                                btCartaComp.setAttribute("class","cCompromiso");                           
-                                btCartaComp.setAttribute("name","BntCC");
-                                btCartaComp.setAttribute("id",json[i]["idcandidato"]);
-                                btCartaComp.addEventListener("click",getCartaMotivos);
-                                var t = document.createTextNode("Ver carta motivos");  
-                                // Create a text node
-                                btCartaComp.appendChild(t);
-                                div2.appendChild(btCartaComp);
-                                
-                            }else {
-                                cell0.innerHTML= "Carta de motivos: NO ENTREGADA";
-                            }
-        //cell0.innerHTML = "Carta de Motivos: "+ json[i]["cartaMotivos"];
-                            
-                        //agregando boton de validar candidato    
-                        var validarCandidato = document.createElement('BUTTON');
-                        validarCandidato.setAttribute("class","validar");
-                        //validarCandidato.setAttribute("value",json[i]['idcandidato']);
-                        validarCandidato.setAttribute("name","idBnt");
-                       // validarCandidato.setAttribute("id",json[i]['idcandidato']);
-                        
-                        validarCandidato.setAttribute("id",json[i]["idcandidato"]);
-                        validarCandidato.addEventListener("click",validarCandidatos);
-                        var t = document.createTextNode("Validar Candidato");  
-                        // Create a text node
-                        validarCandidato.appendChild(t);
-                        div2.appendChild(validarCandidato);
-                        
-                         var br = document.createElement("br");    
-                         
-                    
-                        var hr = document.createElement("hr");    
-                        infoSeccion.appendChild(br);
-                        infoSeccion.appendChild(hr);
-               
-            }
-            //agregando eventos a los botones de cada candidato
             
-        });
-    }
-    function validarCandidatos(){
-        //algo = request.getParameter("idBnt");
-        //recuerpando el id del candidato sobre el que dieron click
-        alert(this.id);
-    }
-    function getCartaMotivos(){
-        alert(this.id);
-    }
-    function getCartaCompromiso(){
-        alert(this.id);
-    }
         </script>
     </head>
     <body>
@@ -187,7 +51,7 @@
                         <h2>Lista de candidatos no aceptados en algun seminario.</h2>
                                                                 
                                   
-                        <input type="submit" id="boton">					
+                      					
                     </section>
 
                 </div>
