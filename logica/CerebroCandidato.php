@@ -158,7 +158,7 @@ include '../Persistencia/DBConnection.php';
             /*
              * Obteniendo la lista de candidatos aceptados
              */
-            echo "entro a la funcion insertCandidatoAceptado con datos = ".$datos;
+            
             $idCandidato = $datos;
             $semestre = "2017 II";   
             $conn = new Connection();
@@ -199,9 +199,9 @@ include '../Persistencia/DBConnection.php';
                 $result = $conn->db_query($sql);
                 $sql = "UPDATE `CANDIDATO` SET `IDGRUPO`= ".$result." WHERE IDCANDIDATO = ".$datos;
                 $result = $conn->db_query($sql);
-                echo "Candidato registrado existosamente";
+                echo "Candidato aceptado existosamente";
             }else {
-                $flag = true;
+                
                 
                 for($i = 1;$i< 30; $i++){
                     
@@ -212,10 +212,10 @@ include '../Persistencia/DBConnection.php';
                     
                     $result = $conn->db_query($sql);
                     $reg = $result->fetch_assoc();
-                    echo "<br> idgrupo = ".$reg['IDGRUPO'];
+                    
                     
                     if($reg['COUNT(IDCANDIDATO)'] < 25){
-                       echo "entro en el if con ".$reg['COUNT(IDCANDIDATO)'];
+                       
                         $sql = "UPDATE `CANDIDATO` SET `IDGRUPO` = '". $reg['IDGRUPO']
                                 ."' WHERE IDCANDIDATO = '".$idCandidato."'";
                         $result = $conn->db_query($sql);
@@ -223,7 +223,7 @@ include '../Persistencia/DBConnection.php';
                     }
                     
                 }
-               echo "ya existia el grupo"; 
+               echo "Candidato aceptado con exito"; 
             }           
         }
         /*
