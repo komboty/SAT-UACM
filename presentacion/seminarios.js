@@ -168,9 +168,9 @@ function mostrar() {
     });
     
     function getCartaMotivos(){
-        alert(this.id);
+        window.open("../logica/CerebroCandidato.php?option=getCartaMotivos&datos="+this.id);        
     }
     function getCartaCompromiso(){
-        alert(this.id);
+        window.open("../logica/CerebroCandidato.php?option=getCartaCompromiso&datos="+this.id);
     }
 }

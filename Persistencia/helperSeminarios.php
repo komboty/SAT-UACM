@@ -106,7 +106,7 @@ class helperSeminarios {
         }
     }
     
-    //Regresa la foto de un alumno.
+    //Regresa la foto de un candidato.
     public function getFoto($datos) { 
         $sql = "SELECT FOTO FROM CANDIDATO WHERE IDCANDIDATO = ".$datos;
         $result = $this->coconn->db_query($sql);
@@ -119,5 +119,37 @@ class helperSeminarios {
         } else {
             echo "0 results";
         }
-    }    
+    }
+
+    //regresa la carta compromiso de un candidato.
+    public function getComprimiso($datos) {
+        $sql = "SELECT CARTACOMPROMISO FROM CANDIDATO WHERE IDCANDIDATO = ".$datos;
+        $result = $this->coconn->db_query($sql);
+        
+        if ($result->num_rows > 0) {
+        // output data of each row
+            $data = $result->fetch_assoc();
+                    
+            header("Content-type: image.pdf; charset=utf-8");
+            echo $data['CARTACOMPROMISO']; 
+        } else {
+        echo "0 results";
+        }
+    }
+    
+    //regresa la carta exposición de motivos de un candidato.
+    public function getMotivos($datos) {
+        $sql = "SELECT CARTAEXPOMOTIVOS FROM CANDIDATO WHERE IDCANDIDATO = ".$datos;
+        $result = $this->coconn->db_query($sql);
+        
+        if ($result->num_rows > 0) {
+        // output data of each row
+            $data = $result->fetch_assoc();
+                    
+            header("Content-type: image.pdf; charset=utf-8");
+            echo $data['CARTAEXPOMOTIVOS']; 
+        } else {
+        echo "0 results";
+        }
+    }
 }

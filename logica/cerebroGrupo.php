@@ -29,3 +29,11 @@ include '../Persistencia/helperSeminarios.php';
     if($method == "GET" && $option == 'getFoto'){
         $helperSeminarios->getFoto($datos);
     }
+        
+    if($method == "GET" && $option == 'getCartaCompromiso'){
+        $helperSeminarios->getComprimiso($datos);
+    }
+    
+    if($method == "GET" && $option == 'getCartaMotivos'){
+        $helperSeminarios->getMotivos($datos);
+    }
